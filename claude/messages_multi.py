@@ -15,12 +15,14 @@ AVAILABLE_MODEL_IDS = [
 
 model_id = AVAILABLE_MODEL_IDS[-1] # claude-3-sonnet
 
-file_path = os.path.join(os.path.dirname(__file__),'image/img_way-to-draw-architecture_03.08e1366ebaecaf76a333002acbe1e2bd363acd4b.png')
+FILE_NAME = 'lattice.jpeg'
+
+file_path = os.path.join(os.path.dirname(__file__),f'image/{FILE_NAME}')
 ext = file_path.split('.')[-1]
 with open(file_path,'rb') as f:
     content_image = base64.b64encode(f.read()).decode('utf-8')
 
-system_prompt = '以下はユーザーと AI のやり取りです。ユーザーは様々なセンサーの画像を与えます。AI はセンサーの値を読み取ってください。'
+system_prompt = '以下はユーザーと AI の日本語でのやり取りです。AI はユーザーの質問に日本語で返します。'
 messages = [
     {
         "role": "user","content": [
@@ -33,7 +35,8 @@ messages = [
                 }
             },
             {
-                "type": "text", "text": '画像は AWS を用いたアーキテクチャーです。説明してください。'
+                "type": "text", 
+                "text": '与えた画像についてお菓子は何種類映っていますか？またそのお菓子はなんですか？'
             },
         ]
     },
@@ -49,6 +52,15 @@ body = json.dumps({
     'stop_sequences': []
 })
 
-response = br.invoke_model(body=body, modelId=model_id)
-response_body = json.loads(response.get('body').read())
-print(response_body['content'][0]['text'])
+response = br.invoke_model_with_response_stream(body=body, modelId=model_id)
+for event in response.get("body"):
+    chunk = json.loads(event["chunk"]["bytes"])
+
+    if chunk['type'] == 'message_delta':
+        print(f"\nStop reason: {chunk['delta']['stop_reason']}")
+        print(f"Stop sequence: {chunk['delta']['stop_sequence']}")
+        print(f"Output tokens: {chunk['usage']['output_tokens']}")
+
+    if chunk['type'] == 'content_block_delta':
+        if chunk['delta']['type'] == 'text_delta':
+            print(chunk['delta']['text'], end="")

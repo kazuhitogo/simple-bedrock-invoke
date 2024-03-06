@@ -1,3 +1,4 @@
+# docs: https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-mistral.html
 import json
 import boto3
 
@@ -29,13 +30,8 @@ body = json.dumps({
     'stop' : ['</output>']
 })
 
-response = br.invoke_model(
-    body=body,
-    modelId=modelId
-)
-
-response_body = json.loads(response.get('body').read())
-
-outputs = response_body.get('outputs')
-
-print(outputs[0]['text'])
+response = br.invoke_model_with_response_stream(body=body, modelId=modelId)
+for event in response.get("body"):
+    chunk = json.loads(event["chunk"]["bytes"])['outputs'][0]
+    print(chunk['text'],end='')
+print(f'\nstop_reason: {chunk["stop_reason"]}')

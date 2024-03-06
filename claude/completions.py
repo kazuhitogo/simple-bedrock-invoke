@@ -35,8 +35,14 @@ body = json.dumps({
     'stop_sequences': ['</output>'],
 })
 
-response = br.invoke_model(body=body, modelId=modelId, accept=accept, contentType=contentType)
+response = br.invoke_model_with_response_stream(body=body, modelId=modelId, accept=accept, contentType=contentType)
 
-response_body = json.loads(response.get('body').read())
+stream = response.get('body')
 
-print(response_body.get('completion'))
+if stream:
+    for event in stream:
+        chunk = event.get('chunk')
+        if chunk:
+            print(json.loads(chunk.get('bytes').decode())['completion'],end='')
+metrics = json.loads(chunk.get('bytes').decode())['amazon-bedrock-invocationMetrics']
+print(metrics)

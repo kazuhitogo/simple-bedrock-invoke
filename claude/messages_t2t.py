@@ -39,7 +39,13 @@ body=json.dumps({
     'stop_sequences': ['</output>']
 })
 
-response = br.invoke_model(body=body, modelId=model_id)
-response_body = json.loads(response.get('body').read())
-print(response_body['content'][0]['text'])
-
+response = br.invoke_model_with_response_stream(body=body, modelId=model_id)
+for event in response.get("body"):
+    chunk = json.loads(event["chunk"]["bytes"])
+    if chunk['type'] == 'message_delta':
+        print(f"\nStop reason: {chunk['delta']['stop_reason']}")
+        print(f"Stop sequence: {chunk['delta']['stop_sequence']}")
+        print(f"Output tokens: {chunk['usage']['output_tokens']}")
+    if chunk['type'] == 'content_block_delta':
+        if chunk['delta']['type'] == 'text_delta':
+            print(chunk['delta']['text'], end="")
