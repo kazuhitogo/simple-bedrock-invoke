@@ -44,9 +44,10 @@ messages = [
 ]
 
 body = json.dumps({
-    "anthropic_version": ANTHROPIC_VERSION,
-    "max_tokens": 4096,
-    "messages": messages,
+    'anthropic_version': ANTHROPIC_VERSION,
+    'max_tokens': 4096,
+    'system': system_prompt,
+    'messages': messages,
     'temperature': 0,
     'top_p': 0,
     'top_k': 0,
