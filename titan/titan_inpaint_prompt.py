@@ -25,7 +25,7 @@ body = json.dumps({
     'taskType': 'INPAINTING',
     'inPaintingParams': {
         'image': make_image_content('image/dog.jpeg'),
-        'text': 'running cat',
+        'text': 'jumping dolphin, Landscape, anime',
         'negativeText': 'bad quality, low res',
         'maskPrompt': 'running dog',
         # 'maskImage': '',
