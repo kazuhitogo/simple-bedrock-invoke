@@ -1,4 +1,6 @@
-# docs: https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-mistral.html
+# docs:
+# https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-mistral.html
+
 import json
 import boto3
 
@@ -12,10 +14,11 @@ AVAILABLE_MODEL_IDS = [
 modelId = AVAILABLE_MODEL_IDS[0] # v2:1
 
 # prompt
-phrase = 'Amazon Bedrock is a fully managed service that offers a choice of high-performing foundation models (FMs) from leading AI companies like AI21 Labs, Anthropic, Cohere, Meta, Mistral AI, Stability AI, and Amazon via a single API, along with a broad set of capabilities you need to build generative AI applications with security, privacy, and responsible AI. Using Amazon Bedrock, you can easily experiment with and evaluate top FMs for your use case, privately customize them with your data using techniques such as fine-tuning and Retrieval Augmented Generation (RAG), and build agents that execute tasks using your enterprise systems and data sources. Since Amazon Bedrock is serverless, you don\'t have to manage any infrastructure, and you can securely integrate and deploy generative AI capabilities into your applications using the AWS services you are already familiar with.'
-from_lang = '英語'
-to_lang = '日本語'
-prompt = f'''<s> 以下はユーザーと AI のやりとりです。
+phrase = 'Amazon Bedrockは、高いパフォーマンスを提供する基底モデル（FM）を提供するLeading AI社の1つから複数のAmazon、AI21 Labs、Anthropic、Cohere、Meta、Mistral AI、Stability AIによって管理される全管理サービスです。 これには、セキュリティ、プライバシー、責任のあるAIアプリケーションを構築するために必要な広範な機能が含まれています。 Amazon Bedrockを使用することで、使用ケースに適したFMを簡単に実験・評価でき、自分のデータでプライベートにカスタマイズでき、企業システムやデータソースを使用してタスクを実行するエージェントを構築できます。Amazon Bedrockはサーバレスであるため、インフラストラクチャを管理する必要はありません。あなたが熟知しているAWSサービスを使用して、アプリケーションに生成AI能力を安全に統合・デプロイできます。'
+from_lang = '日本語'
+to_lang = '英語'
+prompt = f'''<s>[INST] あなたはチャットでユーザを支援するAIアシスタントです。日本語で会話をしてください。 [/INST]
+コンテキストを理解しました。</s>
 [INST] これから{from_lang}の文章を与えるので、{to_lang}に訳してください。ただし、出力は <output> 翻訳結果 </output> としてください。 [/INST]
 わかりました。</s> 
 [INST] {phrase} [/INST]

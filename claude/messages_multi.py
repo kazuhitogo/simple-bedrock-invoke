@@ -1,4 +1,5 @@
-# docs: https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html
+# docs: 
+# https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html
 
 import boto3
 import json
@@ -15,28 +16,28 @@ AVAILABLE_MODEL_IDS = [
 
 model_id = AVAILABLE_MODEL_IDS[-1] # claude-3-sonnet
 
-FILE_NAME = 'lattice.jpeg'
-
-file_path = os.path.join(os.path.dirname(__file__),f'image/{FILE_NAME}')
-ext = file_path.split('.')[-1]
-with open(file_path,'rb') as f:
-    content_image = base64.b64encode(f.read()).decode('utf-8')
-
-system_prompt = '以下はユーザーと AI の日本語でのやり取りです。AI はユーザーの質問に日本語で返します。'
-messages = [
-    {
-        "role": "user","content": [
-            {
-                "type": "image", 
+def make_image_content(file_path):
+    full_path = os.path.join(os.path.dirname(__file__),f'{file_path}')
+    ext = full_path.split('.')[-1]
+    with open(full_path,'rb') as f:
+        content_image = base64.b64encode(f.read()).decode('utf-8')
+    return {
+        "type": "image", 
                 "source": {
                     "type": "base64",
                     "media_type": f"image/{ext}", 
                     "data": content_image
                 }
-            },
+    }
+
+system_prompt = '以下はユーザーと AI の日本語でのやり取りです。AI はユーザーの質問に親切な日本語で返します。'
+messages = [
+    {
+        "role": "user","content": [
+            make_image_content('./image/lattice.jpeg'),
             {
                 "type": "text", 
-                "text": '与えた画像についてお菓子は何種類映っていますか？またそのお菓子はなんですか？'
+                "text": '与えた画像は日本の 2 種類のお菓子です。何がいくつ映っていますか？'
             },
         ]
     },
