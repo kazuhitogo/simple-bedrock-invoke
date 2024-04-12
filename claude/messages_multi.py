@@ -11,7 +11,7 @@ br = boto3.client(service_name='bedrock-runtime')
 ANTHROPIC_VERSION = 'bedrock-2023-05-31'
 
 AVAILABLE_MODEL_IDS = [
-    'anthropic.claude-3-sonnet-20240229-v1:0', # v3
+    'anthropic.claude-3-haiku-20240307-v1:0','anthropic.claude-3-sonnet-20240229-v1:0', # v3
 ]
 
 model_id = AVAILABLE_MODEL_IDS[-1] # claude-3-sonnet
