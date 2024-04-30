@@ -4,7 +4,7 @@
 import json
 import boto3
 
-br = boto3.client(service_name='bedrock-runtime',region_name='us-west-2')
+br = boto3.client(service_name='bedrock-runtime')
 
 AVAILABLE_MODEL_IDS = [
     'mistral.mistral-7b-instruct-v0:2', # 7b
