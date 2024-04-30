@@ -9,6 +9,7 @@ br = boto3.client(service_name='bedrock-runtime',region_name='us-west-2')
 AVAILABLE_MODEL_IDS = [
     'mistral.mistral-7b-instruct-v0:2', # 7b
     'mistral.mixtral-8x7b-instruct-v0:1', # 8x7b
+    'mistral.mistral-large-2402-v1:0' # large
 ]
 
 modelId = AVAILABLE_MODEL_IDS[0] # v2:1
